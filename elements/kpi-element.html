@@ -1,0 +1,57 @@
+<dom-module id="kpi-element">
+ <style>
+    paper-material
+        {            
+            margin-left: 10px;
+            margin-right: 10px;
+        }   
+        paper-card
+        {
+          color:white;
+
+        } 
+        .mar{
+          margin-top: 10px;
+        }
+    </style>  
+<template>
+    
+    <!-- Creating KPI Componenets -->
+    
+    <br>    
+
+      <paper-card class="mar" style="float:left; background-color:#FFEB3B;width:48%">
+                      <div class="card-content">
+                        <p>Avg Congestion Rate</p>
+                        <h2>24.00 %</h2>
+                      </div>
+      </paper-card>
+    <paper-card class="mar" style="float:right; background-color:#2196F3;width:48%">
+                      <div class="card-content">
+                        <p>Estimated Revenue Loss</p>
+                        <h2>412 243</h2>
+                      </div>
+      </paper-card>
+
+      <br>    <br>
+      <p style="float: clear;"></p>
+      <paper-card class="mar" style="float:left; background-color:#FFC107;width:48%">
+                      <div class="card-content">
+                        <p>Most Congested District</p>
+                        <h2>HIMATNAGAR</h2>
+                      </div>
+      </paper-card>
+    <paper-card class="mar" style="float:right; background-color:#8BC34A;width:48%">
+                      <div class="card-content">
+                        <p>Most Congested City</p>
+                        <h2>VADODARA</h2>
+                      </div>
+      </paper-card>
+</template>
+<script>
+  Polymer({
+        is:"kpi-element"
+        
+    });
+</script>s
+</dom-module>

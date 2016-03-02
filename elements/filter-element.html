@@ -1,0 +1,163 @@
+<dom-module id="filter-element">
+<style is="custom-style">
+    div.header
+    {
+        background-color:whitesmoke;
+        height: 70px;
+        color:black;
+        padding-left: 50px;
+        padding-top: 20px;
+        font-size: 25px;
+            
+    }
+    paper-tabs
+    {
+        --paper-tabs-selection-bar-color:#ff4081;
+    }
+    paper-tab
+    {
+        --paper-tab-ink:#ff4081;
+    }
+</style>
+<template if="{{kettleData}}">
+   <div class="header">
+        Filters
+   </div>     
+   <paper-tabs selected="{{selected}}">
+       <paper-tab>Filter 1
+           
+       </paper-tab>
+       <paper-tab>Filter 2
+           
+       </paper-tab>
+       <paper-tab>Filter 3
+           
+       </paper-tab>          
+    </paper-tabs>
+
+    <iron-pages selected="{{selected}}">
+      <div><!--
+        <paper-dropdown-menu label="Your favourite pastry">
+          <paper-menu class="dropdown-content">
+            <paper-item>Croissant</paper-item>
+            <paper-item>Donut</paper-item>
+            <paper-item>Financier</paper-item>
+            <paper-item>Madeleine</paper-item>
+          </paper-menu>
+        </paper-dropdown-menu>
+            -->
+               <paper-dropdown-menu>
+                   <paper-menu>
+                       <template is="dom-repeat" items="[[filter0Items]]">
+                         <paper-item>[[item]]</paper-item>
+                       </template>
+                   </paper-menu>
+               </paper-dropdown-menu>
+            
+           
+      </div>
+        <div>
+            <paper-dropdown-menu label="Your favourite pastry">
+              <paper-menu class="dropdown-content">
+                <paper-item>Croissant</paper-item>
+                <paper-item>Donut</paper-item>
+                <paper-item>Financier</paper-item>
+                <paper-item>Madeleine</paper-item>
+              </paper-menu>
+            </paper-dropdown-menu>
+        </div>
+      <div>
+         <paper-dropdown-menu>
+                   <paper-menu>
+                       <template is="dom-repeat" items="[[filter2Items]]">
+                         <paper-item>[[item]]</paper-item>
+                       </template>
+                   </paper-menu>
+               </paper-dropdown-menu>
+      </div>
+      
+    </iron-pages>
+</template>
+<script>
+         var workboardData = [];
+          var kettleData = [];
+          var kettleItems = [];
+Polymer({
+    is:"filter-element",
+    properties:
+    {
+        
+    },
+    
+    ready:function()
+    {
+        
+        //var data = document.getElementsByTagName('dashboard-element')[0].createFilter();
+        //console.log(data);
+         // kettleItems = createFilters();
+          //this.filter1Items = kettleItems[1];
+          //this.filter2Items = kettleItems[2];
+        //console.log(filter0Items);
+    },
+      attached:function()
+      {
+          var self = this;
+          
+            var requestData = {"data":{ 
+                 "workboard-id":"1",
+                 "params":{
+                    "p1":"1"
+                  }
+                }};
+          
+            $.ajax({
+                 url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
+                 type: "POST",
+                 beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                 success: function(object)
+                 { 
+                           workboardData=object;     
+                 }
+              });
+          $.ajax({
+                    url: 'http://10.90.21.43:8888/kettle-service/kettle',
+                    type: 'POST',
+                    beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                    data: JSON.stringify(requestData),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    timeout:300000,
+                    async: true,
+                    success: function(object) 
+                    {
+                       kettleData=object;
+                        self.getFilterData();
+                    }
+                 
+                })
+          
+    
+    
+          
+      },
+      getFilterData:function()
+    {
+       
+        $.each(workboardData,function(key,item){
+             item=item.configuration;
+             //count filter-elements
+             if(item.itemType == 'filter-element'){
+                // workboardItems.push(item);
+                 kettleItems.push(kettleData["data"][key]["resultSet"]);
+             }
+         });
+          console.log(kettleItems);
+         this.filter0Items = kettleItems[0];
+         this.filter1Items = kettleItems[1];
+         this.filter2Items = kettleItems[2];
+       
+    }
+})    
+</script>
+
+</dom-module>

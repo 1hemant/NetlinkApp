@@ -1,0 +1,355 @@
+<script src="../json/myjson.js"> </script>
+<dom-module id="stories-element">
+ <style>
+     paper-swipe {
+        height: 300px;
+        --paper-swipe-content: {
+          padding: 20px;
+          color:var(--text-primary-color);
+          height: 100px;
+          cursor: pointer;
+          background-color: white;
+           
+        };
+        --paper-swipe-underlay: 
+            {
+          padding: 20px;
+          color: var(--text-primary-color);
+          height: 300px;
+          background-color:white;
+                
+        };
+      }
+     
+       
+         
+    </style>
+<template>    
+<!-- Creating Stories Content -->  
+        <paper-swipe id="tap" peek-offset="-24" >
+            <div underlay on-click="" id="storyChart1">
+              <paper-ripple></paper-ripple>
+              <div>Click to reset the position of the panel!</div>
+            </div>
+            <div content style="height:300px" id="storyChart2">
+              <paper-ripple></paper-ripple>
+              <div class="label">Reset Swipe Position</div>
+              <div>Swipe left or right to remove the panel.</div>
+            </div>
+          </paper-swipe>
+    <br>
+    <paper-material elevation="0" id="storyChart3" style="display:none"></paper-material>
+    <br>
+    <paper-material elevation="0" id="storyChart4" style="display:none"></paper-material>
+    <br>
+    <paper-material elevation="0" id="storyChart5" style="display:none"></paper-material>
+    
+</template>
+<script>
+      var years=[];
+        var yearsAvg=[];
+
+        var months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        var monthsValues=[];
+
+        var days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+        var daysValue=[];
+        var index=0;
+    
+  Polymer({
+        is:"stories-element",
+       attached:function(){
+            this.async(function(){
+               
+                Polymer.dom.flush();
+                
+                $(this.$.trwChart1).swipe( {
+                    swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+                    // console.log("You swiped " + direction + " with " + fingerCount + " fingers");
+                        if(direction=="left")
+                            {                              
+                               //drawRightChart();
+                            }
+                       
+                    },
+                    threshold:50,
+                    fingers:'all'
+                  });
+
+                  $(this.$.trwChartRight).swipe( {
+                    swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+                    // console.log("You swiped " + direction + " with " + fingerCount + " fingers");
+                        if(direction=="right")
+                            {                                
+                                drawLeftChart();
+                            }                       
+                    },
+                    threshold:50,
+                    fingers:'all'
+                  });
+            });
+        },
+        drawBarChart:function()
+        {
+            for(i=0 ;i<json.temprature.length;i++)
+            {
+                years.push(json.temprature[i].year);
+                yearsAvg.push(json.temprature[i].yearAvg);
+            }              
+
+            $('#storyChart1').highcharts({
+                        chart: {
+                            type: 'column'
+                        },
+                        xAxis: {
+                            categories: years
+                        },
+                         title: {
+                            text: 'Average Annualy Temprature'
+                        },
+                        yAxis:
+                        {
+                                title: {
+                                  text: 'Temprature (\xB0C)'
+                        
+                            }
+                        },
+
+                        plotOptions: {
+                            series: {
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function () {
+                                            //alert('Category: ' + this.category + ', value: ' + this.y);
+                                            //drillDownForLeftChart(this.category);
+                                            drillDownForBarChart(this.category)
+                                         }
+                                    }
+                                }
+                            }
+                        },
+
+                       series: [{
+                            name: 'Year',
+                            data: yearsAvg
+                            }]
+                    });
+yearsAvg=[];
+years=[];
+
+        } ,
+      drawPieChart:function()
+      {
+          console.log("Pie Called");
+             for(i=0 ;i<json.temprature.length;i++)
+            {
+                years.push(json.temprature[i].year);
+                yearsAvg.push(json.temprature[i].yearAvg);
+            }
+           // console.log(years);
+
+              pieChartData=[];
+                  
+                    for(i=0 ;i<years.length ;i++)
+                    {
+                                pieChartData.push([years[i],yearsAvg[i]]);
+
+                    }        
+
+
+     $('#storyChart2').highcharts({
+                        chart: {
+                            type: 'line'
+                        },
+                        xAxis: {
+                            categories: years
+                        },
+                         title: {
+                            text: 'Average Annualy Temprature'
+                        },
+                        yAxis:
+                        {
+                                title: {
+                                  text: 'Temprature (\xB0C)'
+                        
+                            }
+                        },
+
+                        plotOptions: {
+                            series: {
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function () {
+                                            //alert('Category: ' + this.x + ', value: ' + this.y);
+                                            //drillDownForRightChart(years[this.x]);
+                                            //alert(years[this.x])
+                                            
+                                             drillDownForLineChart(years[this.x]);
+                                         }
+                                    }
+                                }
+                            }
+                        },
+
+                       series: [{
+                            name: 'Year',
+                            data:pieChartData
+                            }]
+                    });
+            yearsAvg=[];
+
+      }
+      
+        
+    });    
+    
+    
+    function drillDownForBarChart(selectedYear)
+{
+
+         
+         for(i=0 ;i<json.temprature.length;i++)
+            {
+               if(parseInt(json.temprature[i].year)==selectedYear)
+               {
+                  //monthsValues.push(json.temprature[i].months);
+                  index=i;
+                  break;
+               }
+            }
+            console.log(selectedYear);
+            console.log(monthsValues);
+            //$("#trwChart1").fadeOut();
+            
+           // $('#storyChart3').slideUp();
+            //$('#trwChart1').css("display","none");
+            $('#storyChart3').css("display","block");
+           
+                 $('#storyChart3').highcharts({
+                        chart: {
+                            type: 'line'
+                        },
+                        xAxis: {
+                            categories: months
+                        },
+                         title: {
+                            text: 'Average Monthly Temprature of '+selectedYear
+                        },
+                        yAxis:
+                        {
+                                title: {
+                                  text: 'Temprature (\xB0C)'
+                        
+                            }
+                        },
+
+                        plotOptions: {
+                            series: {
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function () {
+                                            //alert('Category: ' + this.category + ', value: ' + this.y);
+                                           // drillDownForChart1(this.category);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+
+                       series: [{
+                            name: 'Month',
+                            data: json.temprature[index].months
+                            }]
+                    });
+
+
+
+    monthsValues=[];
+
+   
+
+}
+    
+    
+function drillDownForLineChart(selectedYear)
+{
+            console.log(selectedYear);
+          pieChartData=[];
+
+         for(i=0 ;i<json.temprature.length;i++)
+            {
+               if(parseInt(json.temprature[i].year)==selectedYear)
+               {
+                  //monthsValues.push(json.temprature[i].months);
+                  index=i;
+                  break;
+               }
+            }
+
+          var monthsValue = json.temprature[index].months;
+            //console.log(monthsValue);
+           // console.log(months);
+            
+                    for(i=0 ;i<monthsValue.length ;i++)
+                    {
+                                pieChartData.push([months[i],monthsValue[i]]);
+
+                    }    
+                   // console.log(pieChartData)              ;
+           
+            //$("#trwChart1").fadeOut();
+            //$('#storyChart4').slideUp();
+            //$('#trwChart1').css("display","none");
+            $('#storyChart4').css("display","block");
+           
+                 $('#storyChart4').highcharts({
+                        chart: {
+                            type: 'line'
+                        },
+                        xAxis: {
+                            categories: months
+                        },
+                         title: {
+                            text: 'Average Monthly Temprature of '+selectedYear
+                        },
+                        yAxis:
+                        {
+                                title: {
+                                  text: 'Temprature (\xB0C)'
+                        
+                            }
+                        },
+
+                        plotOptions: {
+                            series: {
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function () {
+                                            //alert('Category: ' + this.category + ', value: ' + this.y);
+                                           // drillDownForChart1(this.category);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+
+                       series: [{
+                            name: 'Month',
+                            data: pieChartData
+                            }]
+                    });
+
+
+
+    monthsValues=[];
+
+   
+
+}
+   
+</script>
+</dom-module>

@@ -1,0 +1,185 @@
+
+<dom-module id="navigation-drawer">
+<template>
+    <style is="custom-style">
+        paper-toolbar.drawer
+        {
+            /*background-color: var(--paper-blue-500);*/
+            margin-bottom: 20px;
+            box-shadow: 4px 4px 4px #BDBDBD;
+            height: 150px;
+        }
+        img.profileImg
+        {
+                border-radius: 50%;
+                height:50px;
+                width: 50px;
+                margin-top: 20px;
+                border: 2px solid white;
+                margin-left: 10px;
+        } 
+       
+       
+    </style>
+    <!--Creating Navigation Drawer -->       
+            <!-- Navigation Drawer Header  -->    
+            <paper-toolbar class="drawer">
+                <!-- <img src="../images/person.png" class="profileImg"/>  <span id="userEmail">&nbsp;&nbsp;&nbsp;&nbsp;admin@netlink.com</span> -->
+                
+                <<div>
+                    <img src="../images/person.png" class="profileImg"/>            
+                 </div>
+                    <br>
+                 <div style="color:white; margin-top:130px;margin-left:-30px">
+                        <span id="userName">ADMIN</span>
+                        <!--<span id="userEmail">admin@netlink.com</span> -->
+                 </div> 
+                 <div style="color:white; margin-top:167px;margin-left:-90px">
+                        <span id="userEmail">admin@netlink.com</span>
+                        <!--<span id="userEmail">admin@netlink.com</span> -->
+                 </div> 
+                
+            </paper-toolbar>    
+    <!-- Creating Navigation Drawer Item List -->   
+            <paper-item on-tap="_handleHomeTap">
+              <paper-item-body>
+                <iron-icon icon="home"></iron-icon> Home                
+              </paper-item-body>              
+            </paper-item>
+            <br>
+            <paper-item on-tap="_handleAnalysisTap">
+              <paper-item-body>
+                <iron-icon icon="apps"></iron-icon> Analysis                
+              </paper-item-body>              
+            </paper-item>
+            <br>
+            <paper-item on-tap="_handleStoriesTap">
+              <paper-item-body>
+                <iron-icon icon="apps"></iron-icon> Stories                
+              </paper-item-body>              
+            </paper-item>
+            <br>
+            <paper-item on-click="toggle1">
+              <paper-item-body>
+                <iron-icon id="dashboardItem" icon="apps"></iron-icon> Dashboard               
+              </paper-item-body>              
+            </paper-item>
+                        <iron-collapse id="collapse1" style="margin-top:20px;margin-left:50px;height:50px;font-weight:bold">
+                                <div  id="dashboardItemMenu1" on-click="toggle2">
+                                   Netlink 
+                                </div>  
+                        </iron-collapse>
+    
+                        <iron-collapse id="collapse2" style="margin-top:20px;margin-left:50px;height:50px;font-weight:bold">
+                                <div on-tap="_handleDashboardTap" id="dashboardItemMenu2">
+                                    Usage Pattern
+                                </div>  
+                        </iron-collapse>
+            <br>
+            <paper-item on-tap="_handleKpiTap">
+              <paper-item-body>
+                <iron-icon icon="apps"></iron-icon> Kpi               
+              </paper-item-body>              
+            </paper-item>       
+        
+</template>
+    <script>
+    Polymer({
+       is:"navigation-drawer",
+        
+        attached:function()
+        {           
+            $('#userEmail').html(localStorage.getItem("email"));
+            $('#userName').html(localStorage.getItem("name"));
+            var getDashboardSubMenu="";            
+            $.ajax({
+                 url: "http://10.90.21.43:8888/repository-service/getRepository",                
+                 type: "POST",
+                 beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                 success: function(object)
+                 { 
+                      getDashboardSubMenu =object.dashboards[0].name;
+                      $('#dashboardItemMenu1').html(getDashboardSubMenu);
+                      $('#dashboardItemMenu2').html(object.dashboards[0].value[0].name);
+                    
+                 }
+              }); 
+              
+        },
+        
+        _handleHomeTap:function(e)
+        {
+             $('#home').css("display","block");
+             $('#analysis').css("display","none");
+             $('#stories').css("display","none");
+             $('#dashboard').css("display","none");
+             $('#kpi').css("display","none");            
+             document.querySelector('#navDrawer').closeDrawer();            
+            
+        },
+        _handleAnalysisTap:function(e)
+        {
+             $('#home').css("display","none");
+             $('#analysis').css("display","block");
+             $('#stories').css("display","none");
+             $('#dashboard').css("display","none");
+             $('#kpi').css("display","none");
+             document.querySelector('#navDrawer').closeDrawer();  
+            document.getElementsByTagName('analysis-element')[0].drawChart();
+            
+        },
+        _handleStoriesTap:function(e)
+        {
+             $('#home').css("display","none");
+             $('#analysis').css("display","none");
+             $('#stories').css("display","block");
+             $('#dashboard').css("display","none");
+             $('#kpi').css("display","none");
+             document.querySelector('#navDrawer').closeDrawer(); 
+             document.getElementsByTagName('stories-element')[0].drawPieChart();
+             document.getElementsByTagName('stories-element')[0].drawBarChart();
+             
+        }
+        ,
+        _handleDashboardTap:function(e)
+        {
+            // this.$.collapse.toggle1();
+           // this.$.collapse.toggle2();
+             $('#home').css("display","none");
+             $('#analysis').css("display","none");
+             $('#stories').css("display","none");
+             $('#dashboard').css("display","block");
+             $('#kpi').css("display","none");
+             document.querySelector('#navDrawer').closeDrawer();             
+          
+             document.getElementsByTagName('dashboard-element')[0].createDashboard();  
+            
+        },
+        _handleKpiTap:function(e)
+        {
+             $('#home').css("display","none");
+             $('#analysis').css("display","none");
+             $('#stories').css("display","none");
+             $('#dashboard').css("display","none");
+             $('#kpi').css("display","block"); 
+             document.querySelector('#navDrawer').closeDrawer();        
+            
+          
+        },
+        resetUI:function()
+        {
+             $('#storyChart3').css("display","none");
+             $('#storyChart4').css("display","none");
+             $('#storyChart5').css("display","none");
+            
+        },
+        toggle1: function() {
+            this.$.collapse1.toggle();        
+        },
+         toggle2: function() {
+            this.$.collapse2.toggle();
+        }
+        
+    });
+    </script>
+</dom-module>

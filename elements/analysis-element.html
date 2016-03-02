@@ -1,0 +1,145 @@
+<dom-module id="analysis-element">
+<style>
+paper-material
+    {
+        background-color: white;           
+    }    
+
+</style>
+<template>  
+   <!--Creating Analysis Components -->  
+    <paper-material id="chart1" style="height:300px; background-color:white"></paper-material> 
+    <br>  
+   
+    
+</template>    
+<script>
+ Polymer({
+        is:"analysis-element",
+     
+         attached:function()
+         {
+            this.async(function()
+           {               
+                Polymer.dom.flush();                               
+                $(this.$.chart1).swipe( {
+                    swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+                    
+                        if(direction=="left")
+                            {
+                              var chart = $('#chart1').highcharts();
+                                chart.series[0].setData(        
+          [3.0, 16.9, 19.5, 14.5, 8.2, 31.5, 45.2,
+            56.5, 63.3, 28.3, 33.9, 39.6]
+      )  ;                            
+                                chart.series[1].setData( 
+         
+          [4.0, 6.9, 29.5, 14.5, 8.2, 31.5, 45.2,
+            56.5, 3.3, 8.3, 6.7, 6.6]
+      )  ;                            
+                                chart.series[2].setData( 
+        
+          [2.0, 26.9, 39.5, 44.5, 28.2, 1.5, 5.2,
+            56.5, 5.3, 6.4, 23.9, 9.6]
+      )  ;                            
+
+                            }
+                        if(direction=="right")
+                            {
+                                var chart = $('#chart1').highcharts();
+                                chart.series[0].setData(        
+          [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2,
+            26.5, 23.3, 18.3, 13.9, 9.6]
+      )  ;                            
+                                chart.series[1].setData( 
+         
+          [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8,
+            24.1, 20.1, 14.1, 8.6, 2.5]
+      )  ;                            
+                                chart.series[2].setData( 
+        
+         [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 
+            16.6, 14.2, 10.3, 6.6, 4.8]
+      )  ;                            
+                            }
+                        if(direction=="up")
+                            {
+                                  alert("up swipped"); 
+                            }
+                        if(direction=="down") 
+                            {
+                                  alert("down swipped");   
+                            }
+                    },
+                    threshold:50,
+                    fingers:'all'
+                  });
+            });
+        },
+       drawChart:function()
+     {
+          var title = {
+      text: 'Average Temperatures of Cities'   
+   };
+   var subtitle = {
+      text: 'Source: worldClimate.com'
+   };
+   var xAxis = {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+   };
+   var yAxis = {
+      title: {
+         text: 'Temperature (\xB0C)'
+      },
+      plotLines: [{
+         value: 0,
+         width: 1,
+         color: '#808080'
+      }]
+   };   
+
+   var tooltip = {
+      valueSuffix: '\xB0C'
+   }
+
+   var legend = {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle',
+      borderWidth: 0
+   };
+
+   var series =  [
+      {
+         name: 'Tokyo',
+         data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2,
+            26.5, 23.3, 18.3, 13.9, 9.6]
+      }, 
+      {
+         name: 'New York',
+         data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8,
+            24.1, 20.1, 14.1, 8.6, 2.5]
+      },
+      {
+         name: 'London',
+         data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 
+            16.6, 14.2, 10.3, 6.6, 4.8]
+      }
+   ];
+
+   var json = {};
+
+   json.title = title;
+   json.subtitle = subtitle;
+   json.xAxis = xAxis;
+   json.yAxis = yAxis;
+   json.tooltip = tooltip;
+   json.legend = legend;
+   json.series = series;
+
+   $('#chart1').highcharts(json);
+       }
+    });     
+</script>
+</dom-module>

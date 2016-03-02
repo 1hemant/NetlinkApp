@@ -1,0 +1,138 @@
+<dom-module id="app-element">
+<template>
+    <style is="custom-style">
+        paper-toolbar.main
+        {
+           /* background-color: var(--paper-blue-500); */
+            box-shadow: 4px 4px 4px #BDBDBD;            
+        }       
+        paper-fab.add
+        {
+            position: fixed;
+            bottom:10px;
+            right: 25px;
+            /*background-color: var(--paper-blue-500);*/
+        }
+        div.content
+        {
+            margin: 20px;            
+        }       
+        section
+        {
+            margin-bottom: 100px;
+        }
+        .dropdown-content {
+      background-color:white;
+      line-height: 20px;
+      border-radius: 3px;
+      color: black;
+      box-shadow: 0px 2px 6px #ccc;
+    }
+    .random-content {
+      padding:10px;       
+      max-width: 250px;
+    }
+   
+    </style>
+    <!-- Paper Drawer Panel -->   
+    <paper-drawer-panel responsive-width="2020px" id="navDrawer">
+        <!-- Left Navigation Drawer -->   
+       <paper-scroll-header-panel drawer style="background-color:whitesmoke"> 
+        <div drawer style="background-color:whitesmoke">
+           <!-- Using Custom element for Navigation Drawer --> 
+           <navigation-drawer></navigation-drawer>
+        </div>
+        </paper-scroll-header-panel>        
+        <!-- Drawer Main Regiion -->
+        <paper-scroll-header-panel main fixed>
+           <div main>                
+                <!-- Toolbar Region -->                   
+                 <paper-toolbar class="main">
+                        <paper-icon-button paper-drawer-toggle icon="menu"></paper-icon-button>
+                           <span title class="flex">Care Cloud</span>
+                      
+                         <paper-icon-button id="filterIcon" on-tap="_onFilterIconTap" icon="refresh"></paper-icon-button>                                                  <x-select horizontal-align="right" vertical-align="top">
+                            <paper-icon-button icon="more-vert" class="dropdown-trigger" ></paper-icon-button> 
+                                <div class="dropdown-content random-content">
+                                        <overflow-element></overflow-element>
+                                </div>
+                        </x-select>
+                </paper-toolbar>                     
+                <!-- Main Content Region -->               
+                <div class="content"> 
+                   
+                      <div class="mdl-layout__drawer-right">
+                        <!-- Filter Element Section -->
+                            <filter-element></filter-element>
+                       </div>                    
+                    <div class="mdl-layout__obfuscator-right"></div>
+                    
+                     <section id="home">  
+                            <!-- Using Custom Component for Home Section-->
+                         <home-element></home-element>                        
+                     </section>    
+                     
+                    <section id="analysis" style="display:none">  
+                            <!-- Using Custom Component for Analysis Section -->
+                         <analysis-element></analysis-element>                      
+                     </section>
+                    
+                    <section id="stories" style="display:none">  
+                            <!-- Using Custom Component for Stories Section -->
+                         <stories-element></stories-element>                      
+                    </section>
+                    
+                     <section id="dashboard" style="display:none">  
+                            <!-- Using Custom Component for Dashboard Section -->
+                         <dashboard-element></dashboard-element>
+                     </section>
+                    
+                    <section id="kpi" style="display:none">  
+                            <!-- Using Custom Component for KPI Section -->
+                         <kpi-element></kpi-element>                       
+                     </section>                     
+                </div>
+                <paper-fab icon="cached" class="add"></paper-fab>    
+             
+           </div>             
+            
+            <!-- Using Custom elements for Bottom bar -->
+                <!--  <bottom-bars></bottom-bars>   -->
+            <!--  END -->
+            
+         </paper-scroll-header-panel>
+                 
+    </paper-drawer-panel>
+</template>
+    <script>
+    Polymer({
+       is:"app-element",
+        attached:function()
+        {                         
+                               
+        },
+        _onFilterIconTap:function()
+        {
+             $('#filterIcon').click(function(){
+                 if($('.mdl-layout__drawer-right').hasClass('active')){       
+                    $('.mdl-layout__drawer-right').removeClass('active'); 
+                 }
+ else{
+    $('.mdl-layout__drawer-right').addClass('active'); 
+ }
+});
+
+$('.mdl-layout__obfuscator-right').click(function(){
+ if($('.mdl-layout__drawer-right').hasClass('active')){       
+    $('.mdl-layout__drawer-right').removeClass('active'); 
+ }
+ else{
+    $('.mdl-layout__drawer-right').addClass('active'); 
+ }
+});
+        }
+        
+        
+    });
+    </script>
+</dom-module>

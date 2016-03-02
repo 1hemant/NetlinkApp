@@ -1,0 +1,290 @@
+<dom-module id="dashboard-element">
+<!--
+<script src="../json/kettle.js"></script>
+    <script src="../json/visualisation.js"></script>
+    <script src="../json/workboard.js"></script>
+-->
+    
+<template>   
+    <style>
+    div
+        {
+            margin-right: 10px;
+        }
+    </style>
+<!-- Creating Dasboard Content --> 
+<div id="container" style="width:100%;margin-right:10px">
+    
+</div>
+    
+</template>
+<script>
+// VAriable declaration
+var workboardData;
+var kettleData;
+var visualData;
+    var i=0;
+    var workboardItems=[];
+    var kettleItems=[];
+    
+// Polymer code    
+  Polymer({
+      is:"dashboard-element",
+      
+      
+      ////////////////////////
+      // Code to create filter
+      ready: function(){
+         
+      },
+      attached:function()
+      {
+          
+            $.ajax({
+                 url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
+                 type: "POST",
+                 beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                 success: function(object)
+                 { 
+                           workboardData=object;     
+                 }
+              }); 
+          
+          $.ajax({
+                 url: "http://10.90.21.43:8888/visualization-service/getVisualizationData?workboard_id=1",                
+                 type: "POST",
+                 beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                 success: function(object)
+                 { 
+                    
+                    visualData=object;
+                 }
+              }); 
+          
+          var requestData = {"data":{ 
+     "workboard-id":"1",
+  "params":{
+    "p1":"1"
+  }
+}};
+                $.ajax({
+                    url: 'http://10.90.21.43:8888/kettle-service/kettle',
+                    type: 'POST',
+                    beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                    data: JSON.stringify(requestData),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    timeout:300000,
+                    async: true,
+                    success: function(object) 
+                    {
+                       kettleData=object;                       
+                    }
+                }); 
+          
+          
+        //   $.each(workboardData,function(key,item){
+        //      item=item.configuration;
+        //      //count filter-elements
+        //      if(item.itemType == 'filter-element'){
+        //          workboardItems.push(item);
+        //          kettleItems.push(kettle["data"][key]["resultSet"]);
+        //      }
+        //  })
+        //  this.filter0Items = kettleItems[0];
+        //  this.filter1Items = kettleItems[1];
+        //  this.filter2Items = kettleItems[2];
+          
+               
+           
+      },
+      createFilters:function(){
+        $.each(workboardData,function(key,item){
+            item=item.configuration;
+            //count filter elements
+            if(item.itemType == 'filter-element'){
+                workboardItems.push(item);
+                kettleItems.push(kettleData["data"][key]["resultSet"]);
+            }
+        })
+        return kettleItems;
+      },
+      
+      createDashboard:function()
+      {       
+            var self=this;
+            $.each(workboardData,function(k,value)
+            {
+                 var workboard=[];
+                 var visualisation=[];
+                 var kettle=[];                
+                 workboard.push(value.configuration);                
+                $.each(visualData,function(i,e)
+                 {
+                        if(k==i)                                   
+                            visualisation.push(e.configuration);                             
+                 });                 
+                 $.each(kettleData.data,function(i,e)
+                 {
+                        if(k==i)
+                            kettle.push(e); 
+                 });                
+                self.processChartData(k,workboard,visualisation,kettle);             
+            }); 
+          
+          
+         
+      },
+      processChartData:function(key,workboard,visualisation,kettle)
+      {
+          var self=this;
+        if(workboard[0].itemType=="chart-type-1")
+            {                
+                var div=document.createElement('paper-material');
+                div.setAttribute("elevation","2");
+                $(div).css("background-color","white");
+                $(div).css("height","auto");                
+                $(div).css("margin","10px");
+                $(div).css("margin-bottom","20px");
+                $(div).css("padding","5px");
+                div.setAttribute("id","id"+key);
+                var title = document.createElement("h3");
+                title.innerHTML="Chart";
+                div.appendChild(title);                
+                var container=document.getElementById("container");
+                container.appendChild(div);
+                var id ="#id"+key;
+                self.drawChart(id,workboard,visualisation,kettle);
+               
+            }  
+          
+        else if(workboard[0].itemType=="grid-type-1")
+            {                
+                var div=document.createElement('paper-material');                
+                div.setAttribute("elevation","2");
+                $(div).css("background-color","white");
+                $(div).css("height","auto");
+                $(div).css("margin","10px");  
+                $(div).css("margin-bottom","20px");
+                $(div).css("padding","15px");
+                div.setAttribute("id","id"+key);
+                var container=document.getElementById("container");                
+                var id ="#id"+key;               
+                var table = document.createElement('TABLE');
+                table.border='1';
+                table.width='100%';  
+                table.setAttribute("collapse","collapse");
+                var tableBody = document.createElement('TBODY');
+                table.appendChild(tableBody);
+                var tr = document.createElement('TR');
+                 $(tr).css('height','50px');
+                tableBody.appendChild(tr);  
+                $.each(kettle[0].metaData,function(i,e)
+                {
+                        var th = document.createElement('TH');                      
+                        th.appendChild(document.createTextNode(e.colName));
+                        tr.appendChild(th);                    
+                     
+                });                
+                $.each(kettle[0].resultSet,function(i,e)
+                {
+                        var tr = document.createElement('TR');                        
+                        $(tr).css('text-align','center');
+                        $(tr).css('height','50px');
+                        for(var i=0 ; i< e.length ;i++)
+                            {                                 
+                                 var td = document.createElement('TD');
+                                 td.appendChild(document.createTextNode(e[i]));
+                                 tr.appendChild(td);  
+                            }                    
+                        table.appendChild(tr);               
+                });     
+                div.appendChild(table); 
+                container.appendChild(div);
+            }
+           else if(workboard[0].itemType=="filter-element")
+               {
+                         console.log("filter element");
+               }
+            
+            
+        
+      },
+      drawChart:function(id,workboard,visualisation,kettle)
+      {  
+          
+            var categoryIndex=-1 ,y=[];
+            var isCategory="false";
+            var categories=[];
+          
+              $.each(workboard[0].columnInfo,function(i,e)
+                  {
+                     
+                        if(e.isCategory=="true")
+                            {                               
+                                for(var i=0 ; i<workboard[0].columnInfo.length ; i++ )
+                                    {
+                                           if(i!=0)
+                                               {
+                                                      e =workboard[0].columnInfo[i];
+                                                      categoryIndex=e.columnIndex;
+                                                      y.push({name:e.columnName,y:Number(e.isOnY),type:e.type,data:[],index:e.columnIndex});
+                                               }                                           
+                                    }
+                            }
+                           if(e.type=="pie")
+                            {
+                                     y.push({
+                                            type:e.type,
+                                            name:workboard[0].columnInfo[0].columnName,
+                                            data:kettle[0].resultSet
+                                     });
+                            }
+                        
+                  })
+             
+				$.each(kettle[0].resultSet,function(i,e)
+                       {
+					      // console.log(e[0]);
+                    categories.push(e[0]);
+					$.each(y,function(ii,ee){
+						ee.data.push(e[ee.index]);
+					});
+				});
+                 var title = visualisation[0].result.title;
+                 var subtitle = { text: ''};              
+                 var yAxis = {
+                  min: 0,
+                  title: {
+                     text: 'Values'         
+                  }      
+               };
+               var tooltip = visualisation[0].result.tooltip;
+               var plotOptions = visualisation[0].result.plotOptions;
+               var credits = {enabled: false};        
+               var xAxis = { categories: categories };  
+               var json = {};  
+               json.title = title;   
+               json.subtitle = subtitle; 
+               json.tooltip = tooltip;
+               json.xAxis = xAxis;
+               json.yAxis = yAxis;  
+               json.series = y;
+               json.plotOptions = plotOptions;  
+               json.credits = credits;
+               $(id).highcharts(json);  
+         
+      }
+      
+      ////////////////////////
+      ////////////////////////
+
+    
+      
+    });
+    
+  
+    
+    
+</script>
+</dom-module>

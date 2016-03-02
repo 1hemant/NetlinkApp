@@ -1,0 +1,54 @@
+<dom-module id="overflow-element">
+<template>   
+        <paper-item on-tap="_handleOverflowTap" value="profile">Profile</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="changePassword">Change Password</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="settings">Settings</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="logout">Logout</paper-item>   
+</template>
+<script>
+Polymer({
+    is:"overflow-element",
+    properties:
+    {
+        
+    },
+    _handleOverflowTap:function()
+    {
+       var selectedItem = event.target.getAttribute("value")
+        if(selectedItem=="profile")
+           {
+              
+           }
+         if(selectedItem=="changePassword")
+           {
+                
+           }
+         if(selectedItem=="settings")
+           {
+               
+           }
+         if(selectedItem=="logout")
+           {
+               var requestData = {
+                   "authToken":localStorage.getItem("accessToken")
+                   
+                };
+                //console.log(localStorage.getItem("accessToken"));
+              $.ajax({
+                url: "http://10.90.21.43:8888/logout-service/logout",                
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                success: function(object)
+                { 
+                    localStorage.setItem("accessToken")="0";
+                    console.log(localStorage.getItem("accessToken"));
+                    window.location.href="../index.html";     
+                }
+             });
+           }
+    }
+    
+})    
+</script>
+</dom-module>

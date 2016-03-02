@@ -1,0 +1,193 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Static Login Form Flat Responsive Widget Template | Home :: w3layouts</title>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<!-- Custom Theme files -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="keywords" content="Static Login Form Responsive, Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<!--script-->
+    <script src="../bower_components/webcomponentsjs/webcomponents.js"></script>
+    <link rel="import"  href="../bower_components/paper-progress/paper-progress.html"/>
+
+ 
+ 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="js/easyResponsiveTabs.js" type="text/javascript"></script>
+     <script src='https://www.google.com/recaptcha/api.js'></script> 
+		    <script type="text/javascript">
+			    $(document).ready(function () {
+			        $('#horizontalTab').easyResponsiveTabs({
+			            type: 'default', //Types: default, vertical, accordion           
+			            width: 'auto', //auto or any width like 600px
+			            fit: true   // 100% fit in a container
+			        });
+			    });
+                
+        function goLogin()
+        {
+           
+            var requestData = { 
+                        "data":
+                            {
+                                "email":$('#txtUsername').val(),
+                                "password":$('#txtPassword').val(),
+                                "extraDetails":{
+                                            "yourParameter":$('#g-recaptcha-response').val()
+                                    }
+                            }
+                      }; 
+                $.ajax({
+                    url: 'http://10.90.21.43:8888/login-service-mobile/login',
+                    type: 'POST',
+                    data: JSON.stringify(requestData),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: false,
+                    success: function(data) 
+                    {
+                       // console.log(data)
+                        if(data.data.loginStatus=="SUCCESS")
+                        {
+                            localStorage.setItem("name",data.data.name);
+                            localStorage.setItem("email",data.data.email);
+                            localStorage.setItem("accessToken",data.data.authenticationToken);
+                            window.location.href="../carecloud.html"
+                           
+                                    
+                        }
+                       else
+                       {
+                                alert("Invalid Credentials");
+                       }
+                    }
+                });   
+            
+
+       
+        
+    }
+				
+</script>	
+<!--script-->
+<!--style-->
+<style>
+div.background {
+    background: url(klematis.jpg) repeat;
+    border: 2px solid black;
+}
+
+div.transbox {
+    margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+div.transbox p {
+    margin: 5%;
+    font-weight: bold;
+    color: #000000;
+}
+    paper-progress
+    {
+        width: 100%;
+        display:none;
+    }
+</style>
+
+</head>
+<body>
+	<div class="head">
+		<div class="logo">
+			<div class="logo-top">
+                <!-- <h1>The Future of Business</br>Intelligence</h1> -->
+				<img src="images/logo.png" style="width:304px;height:228px;">
+			</div>
+			<div class="logo-bottom">
+				<section class="sky-form">									
+					<p style="
+							font-size: 30px;
+							color: white;
+						">The Care Cloud</p>									
+					
+				</section>
+			</div>
+		</div>		
+		<div class="login">
+			<div class="sap_tabs">
+				<div id="horizontalTab" style="display: block; width: 100%; margin: 0px;">
+					<ul class="resp-tabs-list">
+						<li class="resp-tab-item" aria-controls="tab_item-0" role="tab"><span>Login</span></li>
+						<!-- <li class="resp-tab-item" aria-controls="tab_item-1" role="tab"><label>/</label><span>Sign up</span></li> -->
+						<div class="clearfix"></div>
+					</ul>				  	 
+					<div class="resp-tabs-container">
+						<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
+							<div class="login-top">
+								<form>
+									<input id="txtUsername" type="text" class="email" value="stiwari@netlink.com" placeholder="Email" required=""/>
+									<input id="txtPassword" type="password" class="password" value="AA!11aaa" placeholder="Password" required=""/>		
+								</form>
+                                <br>                           
+                                
+								<div class="login-bottom login-bottom1">
+									<div class="submit">
+										<input type="submit" value="LOGIN" onclick="goLogin()"/>
+									</div>
+									<!-- <ul>
+										<li><p>Or login with</p></li>
+										<li><a href="#"><span class="fb"></span></a></li>
+										<li><a href="#"><span class="twit"></span></a></li>
+										<li><a href="#"><span class="google"></span></a></li>
+									</ul> -->
+									<div class="clear"></div>
+								</div>	
+                                 
+							</div>
+						</div>
+						<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-1">
+						<div class="login-top">
+								<form>
+									<input type="text" class="name active" placeholder="Your Name" required=""/>
+									<input type="text" class="email" placeholder="Email" required=""/>
+									<input type="password" class="password" placeholder="Password" required=""/>		
+								</form>
+								<div class="login-bottom">
+									<div class="submit">
+										<input type="submit" value="SIGN UP"/>
+									</div>
+									<!--<ul>
+										<li><p>Or login with</p></li>
+										<li><a href="#"><span class="fb"></span></a></li>
+										<li><a href="#"><span class="twit"></span></a></li>
+										<li><a href="#"><span class="google"></span></a></li>
+									</ul>-->
+									<div class="clear"></div>
+								</div>	
+							</div>
+							
+						</div>							
+					</div>	
+				</div>
+			</div>	
+		</div>
+		<div class="clear"></div>
+	</div>	
+	<!--<div class="account">
+			<ul>
+				<li><p>Don't have an <a href="#">account?</a></p></li><span>/</span>
+				<li><p>Forgot <a href="#">password?</a></p></li>
+				<div class="clear"></div>
+			</ul>
+		</div>-->
+	<div class="footer">
+		<p>Copyright ©2016 - 2017 Netlink Software Pvt Ltd. All rights reserved.  <a href="http://netlink.com/" target="_blank"></a> </p>
+	</div>
+</body>
+</html>
