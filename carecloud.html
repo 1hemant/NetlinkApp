@@ -9,7 +9,11 @@
             background-color:#f1f1f1;
         }
     </style>
-
+<script>
+    if(localStorage.getItem("accessToken")==0){
+        window.location.href="./index.html"; 
+    }
+</script>
 </head>
 <body class="fullbleed layout vertical">
 

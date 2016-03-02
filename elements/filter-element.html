@@ -19,11 +19,13 @@
         --paper-tab-ink:#ff4081;
     }
 </style>
+<!--<template is="dom-if" if="{{kettleData}}">-->
 <template if="{{kettleData}}">
    <div class="header">
         Filters
    </div>     
    <paper-tabs selected="{{selected}}">
+<!--       <template is="dom-repeat" items="{{kettleItems}}" as="item"> -->
        <paper-tab>Filter 1
            
        </paper-tab>
@@ -32,7 +34,8 @@
        </paper-tab>
        <paper-tab>Filter 3
            
-       </paper-tab>          
+       </paper-tab>
+ <!--      </template>  -->
     </paper-tabs>
 
     <iron-pages selected="{{selected}}">
@@ -47,9 +50,9 @@
         </paper-dropdown-menu>
             -->
                <paper-dropdown-menu>
-                   <paper-menu>
-                       <template is="dom-repeat" items="[[filter0Items]]">
-                         <paper-item>[[item]]</paper-item>
+                   <paper-menu class="dropdown-content">
+                       <template is="dom-repeat" items="{{filter0Items}}" as="item">
+                         <paper-item>{{item}}</paper-item>
                        </template>
                    </paper-menu>
                </paper-dropdown-menu>
@@ -57,7 +60,7 @@
            
       </div>
         <div>
-            <paper-dropdown-menu label="Your favourite pastry">
+            <paper-dropdown-menu label="Your favourite pastry">  
               <paper-menu class="dropdown-content">
                 <paper-item>Croissant</paper-item>
                 <paper-item>Donut</paper-item>
@@ -68,9 +71,9 @@
         </div>
       <div>
          <paper-dropdown-menu>
-                   <paper-menu>
-                       <template is="dom-repeat" items="[[filter2Items]]">
-                         <paper-item>[[item]]</paper-item>
+                   <paper-menu class="dropdown-content">
+                       <template is="dom-repeat" items='{{kettleItems[2]}}' as="item">
+                         <paper-item>{{item}}</paper-item>
                        </template>
                    </paper-menu>
                </paper-dropdown-menu>
@@ -79,7 +82,7 @@
     </iron-pages>
 </template>
 <script>
-         var workboardData = [];
+          var workboardData = [];
           var kettleData = [];
           var kettleItems = [];
 Polymer({
@@ -101,7 +104,7 @@ Polymer({
     },
       attached:function()
       {
-          var self = this;
+            var self = this;
           
             var requestData = {"data":{ 
                  "workboard-id":"1",
@@ -110,31 +113,38 @@ Polymer({
                   }
                 }};
           
-            $.ajax({
-                 url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
-                 type: "POST",
-                 beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
-                 success: function(object)
-                 { 
-                           workboardData=object;     
-                 }
-              });
-          $.ajax({
-                    url: 'http://10.90.21.43:8888/kettle-service/kettle',
-                    type: 'POST',
-                    beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
-                    data: JSON.stringify(requestData),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    timeout:300000,
-                    async: true,
-                    success: function(object) 
-                    {
-                       kettleData=object;
-                        self.getFilterData();
-                    }
-                 
-                })
+          $.when(
+                $.ajax({
+                     url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
+                     type: "POST",
+                     beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                     success: function(object)
+                     { 
+                               workboardData=object;     
+                     }
+                  }),
+              
+              $.ajax({
+                        url: 'http://10.90.21.43:8888/kettle-service/kettle',
+                        type: 'POST',
+                        beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                        data: JSON.stringify(requestData),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        timeout:300000,
+                        async: true,
+                        success: function(object) 
+                        {
+                           kettleData=object;
+                            self.getFilterData();
+                        }
+
+                    })
+          
+    
+        ).done(function(){
+            console.log("Finished loding");
+            });
           
     
     
