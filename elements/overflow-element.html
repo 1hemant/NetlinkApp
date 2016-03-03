@@ -54,7 +54,7 @@ Polymer({
                 type: "POST",
                 data: JSON.stringify(requestData),
                 contentType: 'application/json; charset=utf-8',
-                beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessTo ken"));},
+                beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
                 success: function(object)
                 { 
                     localStorage.setItem("accessToken",0);

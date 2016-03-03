@@ -52,7 +52,7 @@
                <paper-dropdown-menu>
                    <paper-menu class="dropdown-content">
                        <template is="dom-repeat" items="{{filter0Items}}" as="item">
-                         <paper-item>{{item}}</paper-item>
+                         <paper-item><paper-checkbox border-color="white">{{item}}</paper-checkbox></paper-item>
                        </template>
                    </paper-menu>
                </paper-dropdown-menu>
@@ -72,7 +72,7 @@
       <div>
          <paper-dropdown-menu>
                    <paper-menu class="dropdown-content">
-                       <template is="dom-repeat" items='{{kettleItems[2]}}' as="item">
+                       <template is="dom-repeat" items='{{filter2Items}}' as="item">
                          <paper-item>{{item}}</paper-item>
                        </template>
                    </paper-menu>
@@ -81,50 +81,50 @@
       
     </iron-pages>
 </template>
-<script>
-          var workboardData = [];
-          var kettleData = [];
-          var kettleItems = [];
-Polymer({
-    is:"filter-element",
-    properties:
-    {
-        
-    },
-    
-    ready:function()
-    {
-        
-        //var data = document.getElementsByTagName('dashboard-element')[0].createFilter();
-        //console.log(data);
-         // kettleItems = createFilters();
-          //this.filter1Items = kettleItems[1];
-          //this.filter2Items = kettleItems[2];
-        //console.log(filter0Items);
-    },
-      attached:function()
-      {
-            var self = this;
-          
-            var requestData = {"data":{ 
-                 "workboard-id":"1",
-                 "params":{
-                    "p1":"1"
-                  }
-                }};
-          
-          $.when(
-                $.ajax({
-                     url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
-                     type: "POST",
-                     beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
-                     success: function(object)
-                     { 
-                               workboardData=object;     
-                     }
-                  }),
-              
-              $.ajax({
+    <script>
+        var workboardData = [];
+        var kettleData = [];
+        var kettleItems = [];
+        Polymer({
+            is:"filter-element",
+            properties:
+            {
+
+            },
+
+            ready:function()
+            {
+
+                //var data = document.getElementsByTagName('dashboard-element')[0].createFilter();
+                //console.log(data);
+                 // kettleItems = createFilters();
+                  //this.filter1Items = kettleItems[1];
+                  //this.filter2Items = kettleItems[2];
+                //console.log(filter0Items);
+            },
+              attached:function()
+              {
+                    var self = this;
+
+                    var requestData = {"data":{ 
+                         "workboard-id":"1",
+                         "params":{
+                            "p1":"1"
+                          }
+                        }};
+
+                  $.when(
+                    $.ajax({
+                         url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
+                         type: "POST",
+                         beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                         success: function(object)
+                         { 
+                                   workboardData=object;     
+                         }
+                      }),
+
+                    $.ajax({
                         url: 'http://10.90.21.43:8888/kettle-service/kettle',
                         type: 'POST',
                         beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
@@ -139,35 +139,30 @@ Polymer({
                             self.getFilterData();
                         }
 
-                    })
-          
-    
-        ).done(function(){
-            console.log("Finished loding");
-            });
-          
-    
-    
-          
-      },
-      getFilterData:function()
-    {
-       
-        $.each(workboardData,function(key,item){
-             item=item.configuration;
-             //count filter-elements
-             if(item.itemType == 'filter-element'){
-                // workboardItems.push(item);
-                 kettleItems.push(kettleData["data"][key]["resultSet"]);
-             }
-         });
-          console.log(kettleItems);
-         this.filter0Items = kettleItems[0];
-         this.filter1Items = kettleItems[1];
-         this.filter2Items = kettleItems[2];
-       
-    }
-})    
-</script>
+                        })
 
+
+                        ).done(function(){
+                            console.log("Finished loding");
+                            });
+              },
+              getFilterData:function()
+            {
+
+                $.each(workboardData,function(key,item){
+                     item=item.configuration;
+                     //count filter-elements
+                     if(item.itemType == 'filter-element'){
+                        // workboardItems.push(item);
+                         kettleItems.push(kettleData["data"][key]["resultSet"]);
+                     }
+                 });
+                  console.log(kettleItems);
+                 this.filter0Items = kettleItems[0];
+                 this.filter1Items = kettleItems[1];
+                 this.filter2Items = kettleItems[2];
+
+            }
+        })    
+    </script>
 </dom-module>
