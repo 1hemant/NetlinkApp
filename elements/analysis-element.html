@@ -99,9 +99,11 @@ paper-material
       }]
    };   
 
+      
    var tooltip = {
       valueSuffix: '\xB0C'
-   }
+   };
+         
 
    var legend = {
       layout: 'vertical',
@@ -127,7 +129,7 @@ paper-material
             16.6, 14.2, 10.3, 6.6, 4.8]
       }
    ];
-
+   var credits = {enabled: false}; 
    var json = {};
 
    json.title = title;
@@ -137,7 +139,7 @@ paper-material
    json.tooltip = tooltip;
    json.legend = legend;
    json.series = series;
-
+   json.credits = credits;
    $('#chart1').highcharts(json);
        }
     });     

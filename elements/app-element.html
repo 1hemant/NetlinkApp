@@ -50,8 +50,24 @@
                  <paper-toolbar class="main">
                         <paper-icon-button paper-drawer-toggle icon="menu"></paper-icon-button>
                            <span title class="flex">Care Cloud</span>
-                      
-                         <paper-icon-button id="filterIcon" on-tap="_onFilterIconTap" icon="refresh"></paper-icon-button>                                                  <x-select horizontal-align="right" vertical-align="top">
+                     
+                        <x-select horizontal-align="right" vertical-align="top">
+                            <paper-icon-button icon="accessibility" class="dropdown-trigger" ></paper-icon-button> 
+                                <div class="dropdown-content random-content">
+                                        <myspace-element></myspace-element>
+                                </div>
+                        </x-select>
+                     
+                        <x-select horizontal-align="right" vertical-align="top">
+                            <paper-icon-button icon="build" class="dropdown-trigger" ></paper-icon-button> 
+                                <div class="dropdown-content random-content">
+                                        <other-function-element></other-function-element>
+                                </div>
+                        </x-select>
+                         
+                         <paper-icon-button id="filterIcon" on-tap="_onFilterIconTap" icon="filter-list"></paper-icon-button>
+                         
+                         <x-select horizontal-align="right" vertical-align="top">
                             <paper-icon-button icon="more-vert" class="dropdown-trigger" ></paper-icon-button> 
                                 <div class="dropdown-content random-content">
                                         <overflow-element></overflow-element>
@@ -66,6 +82,107 @@
                             <filter-element></filter-element>
                        </div>                    
                     <div class="mdl-layout__obfuscator-right"></div>
+                    
+                    <!-- Div for the Help menu -->
+
+                    <paper-dialog id="helpBox" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image style="width:650px; height:400px;" sizing="contain" src="../images/swiping.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <!-- Dialogs to show diffrent images given in other-function-element -->
+                    
+                    
+
+                    <paper-dialog id="brushDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image src="../images/brush.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <paper-dialog id="chartDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image src="../images/chart.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <paper-dialog id="downloadDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image src="../images/download.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <paper-dialog id="optionsDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image src="../images/options.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                   <paper-dialog id="settingsDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image src="../images/settings.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+
+                    <!--   ends       -->
+                    
+                    
+                    
+                                       
+                    <!-- Dialogs to show diffrent images given in myspace-element -->
+                    
+                    
+                    <paper-dialog id="annotationDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image src="../images/annotation.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <paper-dialog id="mediaDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image src="../images/media.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <paper-dialog id="contactsDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image style="width:600px; height:400px;" sizing="contain" src="../images/contacts.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <paper-dialog id="calanderDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image style="width:600px; height:400px;" sizing="contain" src="../images/calander.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+                    <paper-dialog id="notepadDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                            <iron-image style="width:600px; height:400px;" sizing="contain" src="../images/notepad.png"></iron-image>
+                        
+                          <div class="buttons">
+                            <paper-button dialog-dismiss>Cancel</paper-button>       
+                          </div>
+                    </paper-dialog> 
+
+                   
+                    <!--   ends       -->
+                    
+                    
+                    
+                    
+                    
                     
                      <section id="home">  
                             <!-- Using Custom Component for Home Section-->
@@ -90,6 +207,10 @@
                     <section id="kpi" style="display:none">  
                             <!-- Using Custom Component for KPI Section -->
                          <kpi-element></kpi-element>                       
+                     </section>
+                    <section id="logout" style="display:none">  
+                            <!-- Using Custom Component for KPI Section -->
+                            <h4>logout</h4>                       
                      </section>                     
                 </div>
                 <paper-fab icon="cached" class="add"></paper-fab>    
@@ -117,19 +238,19 @@
                  if($('.mdl-layout__drawer-right').hasClass('active')){       
                     $('.mdl-layout__drawer-right').removeClass('active'); 
                  }
- else{
-    $('.mdl-layout__drawer-right').addClass('active'); 
- }
-});
+                else{
+                   $('.mdl-layout__drawer-right').addClass('active'); 
+                }
+               });
 
-$('.mdl-layout__obfuscator-right').click(function(){
- if($('.mdl-layout__drawer-right').hasClass('active')){       
-    $('.mdl-layout__drawer-right').removeClass('active'); 
- }
- else{
-    $('.mdl-layout__drawer-right').addClass('active'); 
- }
-});
+       $('.mdl-layout__obfuscator-right').click(function(){
+            if($('.mdl-layout__drawer-right').hasClass('active')){       
+               $('.mdl-layout__drawer-right').removeClass('active'); 
+            }
+            else{
+               $('.mdl-layout__drawer-right').addClass('active'); 
+            }
+           });
         }
         
         

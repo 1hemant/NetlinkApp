@@ -1,0 +1,147 @@
+<dom-module id="other-function-element">
+<template>   
+    <!--
+        <paper-item on-tap="_handleOverflowTap" value="profile">Profile</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="changePassword">Change Password</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="settings">Settings</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="Help">Help</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="logout">Logout</paper-item>   
+
+
+-->
+    
+<div role="listbox">
+    
+  <paper-icon-item on-tap="_handleBrushTap">
+    <iron-icon icon="image:brush" item-icon></iron-icon>
+    Brush
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleChartTap">
+    <iron-icon icon="editor:insert-chart" item-icon></iron-icon>
+    Chart
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleDownloadTap">
+    <iron-icon icon="file-download" item-icon></iron-icon>
+    Download
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleOptionsTap">
+    <iron-icon icon="extension" item-icon></iron-icon>
+    Options
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleSettingsTap">
+    <iron-icon icon="settings" item-icon></iron-icon>
+    Settings
+  </paper-icon-item>
+    
+</div>
+    
+    
+  
+    </template>
+<script>
+Polymer({
+    is:"other-function-element",
+    properties:
+    {
+        
+    },
+    _handleOverflowTap:function()
+    {
+        var self=this;
+       var selectedItem = event.target.getAttribute("value")
+        if(selectedItem=="profile")
+           {
+              alert("Profile is clicked.");
+           }
+         if(selectedItem=="changePassword")
+           {
+               alert("Change password is clicked."); 
+           }
+         if(selectedItem=="settings")
+           {
+               alert("Settings is clicked.");
+           }         
+        if(selectedItem=="Help")
+           {
+               
+               document.querySelector('#helpbox').toggle();
+               
+           }
+         if(selectedItem=="logout")
+           {
+               //alert("logout is clicked getting in the loop.");
+               var requestData = {
+                   "authToken":localStorage.getItem("accessToken")
+                   
+                };
+                //console.log(localStorage.getItem("accessToken"));
+              $.ajax({
+                url: "http://10.90.21.43:8888/logout-service/logout",                
+                type: "POST",
+                data: JSON.stringify(requestData),
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                success: function(object)
+                { 
+                    var r = confirm("Confirm if you want to exit.");
+                    if (r == true) {
+                        //localStorage.setItem("accessToken",0);
+                        //console.log(localStorage.getItem("accessToken"),":AccessToken");
+                        console.log(object,"Object on success");
+                        //window.location.href="../index.html";
+                        self.appLogout();
+                        //window.location.href="../login/login.html";
+                    } else {
+                        alert("Logout was not successfull.");
+                    }
+                },
+                error: function(object)
+                { 
+                    alert("Logout was unsuccessfull.");
+                    console.log(object);
+                }
+                
+             });
+           }
+    },
+    appLogout:function()
+    {
+        if(navigator.app){
+            navigator.app.exitApp();
+        }else if(navigator.device){
+                navigator.device.exitApp();
+        }
+        
+        window.location.href="./login/login.html";
+        
+    },
+    _handleBrushTap:function()
+    {
+        document.querySelector('#brushDialog').toggle();
+    },
+    _handleChartTap:function()
+    {
+        document.querySelector('#chartDialog').toggle();
+    },
+    _handleDownloadTap:function()
+    {
+        document.querySelector('#downloadDialog').toggle();
+    },
+    _handleOptionsTap:function()
+    {
+        document.querySelector('#optionsDialog').toggle();
+    },
+    _handleSettingsTap:function()
+    {
+        document.querySelector('#settingsDialog').toggle();
+    }
+    
+    
+    
+})    
+</script>
+</dom-module>

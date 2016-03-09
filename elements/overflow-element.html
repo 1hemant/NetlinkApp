@@ -3,9 +3,11 @@
         <paper-item on-tap="_handleOverflowTap" value="profile">Profile</paper-item>
         <paper-item on-tap="_handleOverflowTap" value="changePassword">Change Password</paper-item>
         <paper-item on-tap="_handleOverflowTap" value="settings">Settings</paper-item>
+        <paper-item on-tap="_handleOverflowTap" value="Help">Help</paper-item>
         <paper-item on-tap="_handleOverflowTap" value="logout">Logout</paper-item>   
-</template>
+
     
+        
     <!--paper dialog template if logout is clicked-->
     <template if="{{}}">
         <paper-dialog   entry-animation="scale-up-animation"
@@ -20,6 +22,8 @@
           </div>
         </paper-dialog>
     </template>
+    
+    </template>
 <script>
 Polymer({
     is:"overflow-element",
@@ -29,21 +33,29 @@ Polymer({
     },
     _handleOverflowTap:function()
     {
+        var self=this;
        var selectedItem = event.target.getAttribute("value")
         if(selectedItem=="profile")
            {
-              
+              alert("Profile is clicked.");
            }
          if(selectedItem=="changePassword")
            {
-                
+               alert("Change password is clicked."); 
            }
          if(selectedItem=="settings")
            {
+               alert("Settings is clicked.");
+           }         
+        if(selectedItem=="Help")
+           {
+               
+               document.querySelector('#helpBox').toggle();
                
            }
          if(selectedItem=="logout")
            {
+               //alert("logout is clicked getting in the loop.");
                var requestData = {
                    "authToken":localStorage.getItem("accessToken")
                    
@@ -54,15 +66,40 @@ Polymer({
                 type: "POST",
                 data: JSON.stringify(requestData),
                 contentType: 'application/json; charset=utf-8',
-                beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessTo ken"));},
+                beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
                 success: function(object)
                 { 
-                    localStorage.setItem("accessToken",0);
-                    console.log(localStorage.getItem("accessToken"));
-                    window.location.href="../index.html";     
+                    var r = confirm("Confirm if you want to exit.");
+                    if (r == true) {
+                        //localStorage.setItem("accessToken",0);
+                        //console.log(localStorage.getItem("accessToken"),":AccessToken");
+                        console.log(object,"Object on success");
+                        //window.location.href="../index.html";
+                        self.appLogout();
+                        //window.location.href="../login/login.html";
+                    } else {
+                        alert("Logout was not successfull.");
+                    }
+                },
+                error: function(object)
+                { 
+                    alert("Logout was unsuccessfull.");
+                    console.log(object);
                 }
+                
              });
            }
+    },
+    appLogout:function()
+    {
+        if(navigator.app){
+            navigator.app.exitApp();
+        }else if(navigator.device){
+                navigator.device.exitApp();
+        }
+        
+        window.location.href="./login/login.html";
+        
     }
     
 })    

@@ -4,18 +4,19 @@
     <script src="../json/visualisation.js"></script>
     <script src="../json/workboard.js"></script>
 -->
-    
+<link href="../styles/round-big-loader.css" rel="stylesheet" type="text/css"/>
 <template>   
     <style>
     div
         {
             margin-right: 10px;
         }
+        
+        
     </style>
 <!-- Creating Dasboard Content --> 
-<div id="container" style="width:100%;margin-right:10px">
-    
-</div>
+<div id="container" style="width:100%;margin-right:10px"></div>
+<div id="loader"  style="display:none"></div>
     
 </template>
 <script>
@@ -26,6 +27,7 @@ var visualData;
     var i=0;
     var workboardItems=[];
     var kettleItems=[];
+    
     
 // Polymer code    
   Polymer({
@@ -39,34 +41,38 @@ var visualData;
       },
       attached:function()
       {
+          var self=this;
+        var requestData = {"data":{ 
+                "workboard-id":"1",
+                "params":{
+                    "p1":"1"
+                }
+                }};  
+        
+        document.getElementById('loader').style.display="block";
+        $.when(
+                $.ajax({
+                     url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
+                     type: "POST",
+                     beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                     success: function(object)
+                     { 
+                               workboardData=object;     
+                     }
+                  }), 
           
-            $.ajax({
-                 url: "http://10.90.21.43:8888/workboard-service/getWorkboard?workboard=1",                
-                 type: "POST",
-                 beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
-                 success: function(object)
-                 { 
-                           workboardData=object;     
-                 }
-              }); 
+                $.ajax({
+                       url: "http://10.90.21.43:8888/visualization-service/getVisualizationData?workboard_id=1",                
+                       type: "POST",
+                       beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                       success: function(object)
+                       { 
+
+                          visualData=object;
+                       }
+                    }), 
           
-          $.ajax({
-                 url: "http://10.90.21.43:8888/visualization-service/getVisualizationData?workboard_id=1",                
-                 type: "POST",
-                 beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
-                 success: function(object)
-                 { 
-                    
-                    visualData=object;
-                 }
-              }); 
-          
-          var requestData = {"data":{ 
-     "workboard-id":"1",
-  "params":{
-    "p1":"1"
-  }
-}};
+           
                 $.ajax({
                     url: 'http://10.90.21.43:8888/kettle-service/kettle',
                     type: 'POST',
@@ -80,24 +86,18 @@ var visualData;
                     {
                        kettleData=object;                       
                     }
-                }); 
+                }).done(function(){
+                                document.getElementById("loader").style.display = "none";
+                                self.createDashboard();
+                            })   
+            );
+                
+                
           
-          
-        //   $.each(workboardData,function(key,item){
-        //      item=item.configuration;
-        //      //count filter-elements
-        //      if(item.itemType == 'filter-element'){
-        //          workboardItems.push(item);
-        //          kettleItems.push(kettle["data"][key]["resultSet"]);
-        //      }
-        //  })
-        //  this.filter0Items = kettleItems[0];
-        //  this.filter1Items = kettleItems[1];
-        //  this.filter2Items = kettleItems[2];
-          
-               
+     
            
       },
+      //This will be used to polpulate filter
       createFilters:function(){
         $.each(workboardData,function(key,item){
             item=item.configuration;
@@ -210,6 +210,7 @@ var visualData;
             
         
       },
+      
       drawChart:function(id,workboard,visualisation,kettle)
       {  
           
@@ -275,16 +276,9 @@ var visualData;
                $(id).highcharts(json);  
          
       }
-      
-      ////////////////////////
-      ////////////////////////
-
     
       
     });
-    
-  
-    
     
 </script>
 </dom-module>

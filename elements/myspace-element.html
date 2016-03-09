@@ -1,0 +1,138 @@
+<dom-module id="myspace-element">
+<template>   
+
+<div role="listbox">
+    
+  <paper-icon-item on-tap="_handleAnnotationTap">
+    <iron-icon icon="image:brush" item-icon></iron-icon>
+    Annotation
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleMediaTap">
+    <iron-icon icon="editor:insert-chart" item-icon></iron-icon>
+    Media
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleContactsTap">
+    <iron-icon icon="file-download" item-icon></iron-icon>
+    Contacts
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleCalanderTap">
+    <iron-icon icon="extension" item-icon></iron-icon>
+    Calander
+  </paper-icon-item>
+    
+  <paper-icon-item on-tap="_handleNotepadTap">
+    <iron-icon icon="settings" item-icon></iron-icon>
+    Notepad
+  </paper-icon-item>
+    
+</div>
+    
+    
+  
+    </template>
+<script>
+Polymer({
+    is:"myspace-element",
+    properties:
+    {
+        
+    },
+    _handleOverflowTap:function()
+    {
+        var self=this;
+       var selectedItem = event.target.getAttribute("value")
+        if(selectedItem=="profile")
+           {
+              alert("Profile is clicked.");
+           }
+         if(selectedItem=="changePassword")
+           {
+               alert("Change password is clicked."); 
+           }
+         if(selectedItem=="settings")
+           {
+               alert("Settings is clicked.");
+           }         
+        if(selectedItem=="Help")
+           {
+               
+               $('#helpBox').css("display","block");
+               
+           }
+         if(selectedItem=="logout")
+           {
+               //alert("logout is clicked getting in the loop.");
+               var requestData = {
+                   "authToken":localStorage.getItem("accessToken")
+                   
+                };
+                //console.log(localStorage.getItem("accessToken"));
+              $.ajax({
+                url: "http://10.90.21.43:8888/logout-service/logout",                
+                type: "POST",
+                data: JSON.stringify(requestData),
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function(xhr){xhr.setRequestHeader('AccessToken',localStorage.getItem("accessToken"));},
+                success: function(object)
+                { 
+                    var r = confirm("Confirm if you want to exit.");
+                    if (r == true) {
+                        //localStorage.setItem("accessToken",0);
+                        //console.log(localStorage.getItem("accessToken"),":AccessToken");
+                        console.log(object,"Object on success");
+                        //window.location.href="../index.html";
+                        self.appLogout();
+                        //window.location.href="../login/login.html";
+                    } else {
+                        alert("Logout was not successfull.");
+                    }
+                },
+                error: function(object)
+                { 
+                    alert("Logout was unsuccessfull.");
+                    console.log(object);
+                }
+                
+             });
+           }
+    },
+    appLogout:function()
+    {
+        if(navigator.app){
+            navigator.app.exitApp();
+        }else if(navigator.device){
+                navigator.device.exitApp();
+        }
+        
+        window.location.href="./login/login.html";
+        
+    },
+    _handleAnnotationTap:function()
+    {
+        document.querySelector('#annotationDialog').toggle();
+    },
+    _handleMediaTap:function()
+    {
+        document.querySelector('#mediaDialog').toggle();
+    },
+    _handleContactsTap:function()
+    {
+        document.querySelector('#contactsDialog').toggle();
+    },
+    _handleCalanderTap:function()
+    {
+        document.querySelector('#calanderDialog').toggle();
+    },
+    _handleNotepadTap:function()
+    {
+        document.querySelector('#notepadDialog').toggle();
+    }
+    
+    
+    
+})    
+</script>
+</dom-module>

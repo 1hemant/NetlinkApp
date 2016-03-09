@@ -101,6 +101,9 @@
                         chart: {
                             type: 'column'
                         },
+                        credits: {
+                            enabled: false
+                        },
                         xAxis: {
                             categories: years
                         },
@@ -161,6 +164,9 @@ years=[];
      $('#storyChart2').highcharts({
                         chart: {
                             type: 'line'
+                        },
+                         credits: {
+                            enabled: false
                         },
                         xAxis: {
                             categories: years
@@ -231,7 +237,10 @@ years=[];
                         chart: {
                             type: 'line'
                         },
-                        xAxis: {
+                     credits: {
+                        enabled: false
+                    },
+                                    xAxis: {
                             categories: months
                         },
                          title: {
@@ -309,7 +318,10 @@ function drillDownForLineChart(selectedYear)
                         chart: {
                             type: 'line'
                         },
-                        xAxis: {
+                     credits: {
+                        enabled: false
+                    },
+                                    xAxis: {
                             categories: months
                         },
                          title: {
